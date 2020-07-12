@@ -9,8 +9,8 @@ db = SQLAlchemy()
 
 def attach_db(app: Flask, database_path: str):
     """
-    attach_db binds a database to a flask application
-    using SQLAlchemy library
+    attach_db
+        binds a database to a flask application using SQLAlchemy library
     """
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -22,14 +22,17 @@ def attach_db(app: Flask, database_path: str):
 class Doctor(db.Model):
     """
     Doctor
-    a persistent doctor entity, extends the base SQLAlchemy Model
+        a persistent doctor entity, extends the base SQLAlchemy Model
     """
     __tablename__ = "doctors"
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
-    age = Column(Integer, nullable=False)
-
+    # Auto incrementing, unique primary key
+    id = Column(Integer, primary_key=True)  # Eg: 130
+    name = Column(String, nullable=False)  # Eg: "Biswas"
+    age = Column(Integer, nullable=False)  # Eg: 25
+    # SQLAlchemy ORM relationship
+    # This relationship enables accessing the patient and doctor data
+    # bi-directionally
     patients = relationship('Patient',
                             backref='doctor',
                             lazy=True,
@@ -41,6 +44,28 @@ class Doctor(db.Model):
         self.age = age
 
     def to_json(self):
+        """
+        to_json(self)
+            Method to create a json representation of the Doctor instance
+
+            EXAMPLE:
+                {
+                    "id": 21,
+                    "name": "Dr. Biswas",
+                    "age": 25,
+                    "patients": [
+                        {
+                            "id": 2,
+                            "name": "Peter Parker",
+                            "age": 21,
+                            "gender": "Male",
+                            "medication": [{"name": "Crosin", "units": "125 ml"},
+                                            {"name": "Paracetemal", "units": "2 tablets"}],
+                            "doctor_id": 21
+                        }
+                    ]
+                }
+        """
         formatted_patients = [patient.to_json() for patient in self.patients]
         return {
             "id": self.id,
@@ -50,14 +75,39 @@ class Doctor(db.Model):
         }
 
     def insert(self):
+        """
+        insert(self)
+            inserts a new doctor into the database
+
+            EXAMPLE
+                doctor = Doctor(name="Dr. Biswas", age=25)
+                doctor.insert()
+        """
         db.session.add(self)
         db.session.commit()
 
     def delete(self):
+        """
+        delete(self)
+            deletes a doctor from the database
+
+            EXAMPLE
+                doctor = Doctor.query.filter(Doctor.name == "Dr. Biswas").first()
+                doctor.delete()
+        """
         db.session.delete(self)
         db.session.commit()
 
     def update(self):
+        """
+        update(self)
+            updates an existing doctor information in the database
+
+            EXAMPLE
+                doctor = Doctor.query.filter(Doctor.name == "Dr. Biswas").first()
+                doctor.age = doctor.age + 1
+                doctor.update()
+        """
         db.session.commit()
 
     def __repr__(self):
@@ -67,15 +117,23 @@ class Doctor(db.Model):
 class Patient(db.Model):
     """
     Patient
-    a persistent patient entity, extends the base SQLAlchemy Model
+        a persistent patient entity, extends the base SQLAlchemy Model
     """
     __tablename__ = "patients"
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
-    age = Column(Integer, nullable=False)
-    gender = Column(String, nullable=False)
-    medication = Column(String, default="")
+    # Auto incrementing, unique primary key
+    id = Column(Integer, primary_key=True)  # Eg: 130
+    name = Column(String, nullable=False)  # Eg: "Dr. Batman"
+    age = Column(Integer, nullable=False)  # Eg: 32
+    # Gender can be a Enum (planning to implement in future)
+    # Right now restrictions to the data inputted are implemented
+    # using frontend and endpoints code
+    gender = Column(String, nullable=False)  # Eg: Male / Female
+    # Medication is a lazy json blob
+    # Sample data type - [{"name" : string, "units" : string}]
+    medication = Column(String, default="")  # Eg: [{"name": "Crosin", "units": "125 ml"}]
+    # Automatically filled when a doctor is assigned to a patient
+    # Eg: sample_patient.doctor = sample_doctor
     doctor_id = Column(Integer, ForeignKey('doctors.id'))
 
     def __init__(self, name, age, gender):
@@ -84,6 +142,21 @@ class Patient(db.Model):
         self.gender = gender
 
     def to_json(self):
+        """
+        to_json(self)
+            Method to create a json representation of the Patient instance
+
+            EXAMPLE:
+                {
+                    "id": 2,
+                    "name": "Peter Parker",
+                    "age": 21,
+                    "gender": "Male",
+                    "medication": [{"name": "Crosin", "units": "125 ml"},
+                                    {"name": "Paracetemal", "units": "2 tablets"}],
+                    "doctor_id": 21
+                }
+        """
         return {
             "id": self.id,
             "name": self.name,
@@ -94,14 +167,40 @@ class Patient(db.Model):
         }
 
     def insert(self):
+        """
+        insert(self)
+            inserts a new patient into the database
+
+            EXAMPLE
+                patient = Patient(name="Ben 10", age=10, gender="Male")
+                patient.doctor = doctor_instance
+                patient.insert()
+        """
         db.session.add(self)
         db.session.commit()
 
     def delete(self):
+        """
+        delete(self)
+            deletes a patient from the database
+
+            EXAMPLE
+                patient = Patient.query.filter(Patient.name == "Ben 10").first()
+                patient.delete()
+        """
         db.session.delete(self)
         db.session.commit()
 
     def update(self):
+        """
+        update(self)
+            updates an existing patient information in the database
+
+            EXAMPLE
+                patient = Patient.query.filter(Patient.name == "Ben 10").first()
+                patient.age = patient.age + 1
+                patient.update()
+        """
         db.session.commit()
 
     def __repr__(self):
