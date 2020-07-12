@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 import os
 
 
-def get_database_path() -> str:
+def get_database_path(testing: bool) -> str:
     """
     get_database_path method creates a SQLAlchemy specific database path based
     on key-value pairs present in .env file
@@ -10,7 +10,10 @@ def get_database_path() -> str:
     load_dotenv()
 
     if os.getenv("mode") == "Development":
-        database_filename = os.getenv("sqlite_filename")
+        if testing:
+            database_filename = "test_" + os.getenv("sqlite_filename")
+        else:
+            database_filename = os.getenv("sqlite_filename")
         project_dir = os.path.dirname(os.path.abspath(__file__))
         database_path = "sqlite:///{}".format(os.path.join(project_dir, database_filename))
         return database_path

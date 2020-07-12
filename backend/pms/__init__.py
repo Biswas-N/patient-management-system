@@ -4,7 +4,7 @@ from .models import attach_db
 from .utils import get_database_path
 
 APP = Flask(__name__)
-attach_db(app=APP, database_path=get_database_path())
+attach_db(app=APP, database_path=get_database_path(testing=False))
 
 
 @APP.route("/")

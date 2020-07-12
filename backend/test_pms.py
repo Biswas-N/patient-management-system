@@ -35,7 +35,7 @@ def insert_dummy_data() -> None:
 class ModelsTestCase(unittest.TestCase):
     def setUp(self) -> None:
         self.app = APP
-        attach_db(app=self.app, database_path=get_database_path())
+        attach_db(app=self.app, database_path=get_database_path(testing=True))
         self.client = self.app.test_client
 
         insert_dummy_data()
