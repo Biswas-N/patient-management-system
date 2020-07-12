@@ -24,7 +24,7 @@ An open source Python's Flask and JavaScript's ReactJS based full stack applicat
     - id : Serial Integer
     - name : String
     - age : Integer
-    - patients : List<Patient>
+    - patients : List of patients
 
 *Note: A doctor can have **many** patients but a patient can only have **one** doctor*
 
