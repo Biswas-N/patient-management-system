@@ -61,3 +61,47 @@ class Doctor(db.Model):
 
     def __repr__(self):
         return json.dumps(self.to_json())
+
+
+class Patient(db.Model):
+    """
+    Patient
+    a persistent patient entity, extends the base SQLAlchemy Model
+    """
+    __tablename__ = "patients"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    age = Column(Integer, nullable=False)
+    gender = Column(String, nullable=False)
+    medication = Column(String, default="")
+    doctor_id = Column(Integer, ForeignKey('doctors.id'))
+
+    def __init__(self, name, age, gender):
+        self.name = name
+        self.age = age
+        self.gender = gender
+
+    def to_json(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "age": self.age,
+            "gender": self.gender,
+            "medication": self.medication,
+            "doctor_id": self.doctor_id
+        }
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def __repr__(self):
+        return json.dumps(self.to_json())
