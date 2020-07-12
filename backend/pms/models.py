@@ -41,11 +41,12 @@ class Doctor(db.Model):
         self.age = age
 
     def to_json(self):
+        formatted_patients = [patient.to_json() for patient in self.patients]
         return {
             "id": self.id,
             "name": self.name,
             "age": self.age,
-            "patients": self.patients
+            "patients": formatted_patients
         }
 
     def insert(self):
