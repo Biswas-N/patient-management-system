@@ -38,7 +38,7 @@ An open source Python's Flask and JavaScript's ReactJS based full stack applicat
     - update:patient
     - delete:patient
     - read:doctor
-- Head Doctor (Admin) - CRUD a doctor
+- Dean (Admin) - CRUD a doctor and a patient
     - all of above
     - create:doctor
     - update:doctor
