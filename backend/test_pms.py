@@ -33,7 +33,7 @@ def insert_dummy_data() -> None:
 
 
 class ModelsTestCase(unittest.TestCase):
-    def setUp(self) -> None:
+    def setUp(self):
         self.app = APP
         attach_db(app=self.app, database_path=get_database_path(testing=True))
         self.client = self.app.test_client
@@ -53,6 +53,30 @@ class ModelsTestCase(unittest.TestCase):
         single_doctor = Doctor.query.filter(Doctor.name == "Non Existing").first()
         self.assertIsNone(single_doctor)
 
+    def test_doctor_create(self):
+        sample_doctor_data = {"name": "Dr. Tony Stark", "age": 45}
+        sample_doctor = Doctor(**sample_doctor_data)
+        sample_doctor.insert()
+
+        self.assertEqual(5, sample_doctor.id)
+
+    def test_doctor_update(self):
+        doctor = Doctor.query.filter(Doctor.name == "Dr. Biswas").first()
+        doctor.age = doctor.age - 2
+        doctor.update()
+
+        self.assertEqual(1, doctor.id)
+        self.assertEqual("Dr. Biswas", doctor.name)
+        self.assertEqual(23, doctor.age)
+
+    def test_doctor_delete(self):
+        doctor = Doctor.query.filter(Doctor.name == "Dr. Biswas").first()
+        doctor.delete()
+
+        doctor = Doctor.query.filter(Doctor.name == "Dr. Biswas").first()
+
+        self.assertIsNone(doctor)
+
     def test_patient_get_all(self):
         all_patients = Patient.query.all()
         self.assertEqual(5, len(all_patients))
@@ -65,6 +89,30 @@ class ModelsTestCase(unittest.TestCase):
         # For non - existing entity
         single_patient = Patient.query.filter(Patient.name == "Non Existing").first()
         self.assertIsNone(single_patient)
+
+    def test_patient_create(self):
+        sample_patient_data = {"name": "Oliver Queen", "age": 32, "gender": "Male"}
+        sample_patient = Patient(**sample_patient_data)
+        sample_patient.insert()
+
+        self.assertEqual(6, sample_patient.id)
+
+    def test_patient_update(self):
+        patient = Patient.query.filter(Patient.name == "Ben 10").first()
+        patient.age = patient.age + 2
+        patient.update()
+
+        self.assertEqual(1, patient.id)
+        self.assertEqual("Ben 10", patient.name)
+        self.assertEqual(12, patient.age)
+
+    def test_patient_delete(self):
+        patient = Patient.query.filter(Patient.name == "Ben 10").first()
+        patient.delete()
+
+        patient = Patient.query.filter(Patient.name == "Ben 10").first()
+
+        self.assertIsNone(patient)
 
 
 if __name__ == '__main__':
