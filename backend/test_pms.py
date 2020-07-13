@@ -1,5 +1,6 @@
 import unittest
 import random
+import json
 
 from backend.pms import APP, attach_db, get_database_path
 from backend.pms.models import db, Doctor, Patient
@@ -122,6 +123,102 @@ class ModelsTestCase(unittest.TestCase):
         patient = Patient.query.get(patient_id_copy)
 
         self.assertIsNone(patient)
+
+
+class PatientEndpointsTestCase(unittest.TestCase):
+    def setUp(self):
+        self.app = APP
+        attach_db(app=self.app, database_path=get_database_path(testing=True))
+        self.client = self.app.test_client
+
+        insert_dummy_data()
+
+    def test_get_all_patients(self):
+        res = self.client().get("/patients")
+        data = json.loads(res.data)
+
+        self.assertEqual(200, res.status_code)
+        self.assertTrue(isinstance(data["patients"], list))
+
+        res = self.client().get("/patients?page=2")
+        data = json.loads(res.data)
+
+        self.assertEqual(200, res.status_code)
+        self.assertTrue(isinstance(data["patients"], list))
+
+        res = self.client().get("/patients?page=3")
+        data = json.loads(res.data)
+
+        self.assertEqual(404, res.status_code)
+        self.assertFalse(data["success"])
+        self.assertEqual("resource not found", data["message"])
+
+    def test_get_single_patient(self):
+        res = self.client().get("/patients/1")
+        data = json.loads(res.data)
+
+        self.assertEqual(200, res.status_code)
+        self.assertTrue(isinstance(data["patient"], dict))
+        self.assertEqual("Ben 10", data["patient"]["name"])
+
+        res = self.client().get("/patients/100")
+        data = json.loads(res.data)
+
+        self.assertEqual(404, res.status_code)
+        self.assertFalse(data["success"])
+        self.assertEqual("resource not found", data["message"])
+
+    def test_create_patient(self):
+        new_patient = {"name": "Jack Sparrow", "age": 42, "gender": "Male"}
+        res = self.client().post("/patients", json=new_patient)
+        data = json.loads(res.data)
+
+        self.assertEqual(201, res.status_code)
+        self.assertTrue(data["success"])
+        self.assertTrue(data["patient"]["id"])
+        self.assertEqual("Jack Sparrow", data["patient"]["name"])
+
+        faulty_new_patient = {"name": "Jack Sparrow"}
+        res = self.client().post("/patients", json=faulty_new_patient)
+        data = json.loads(res.data)
+
+        self.assertEqual(400, res.status_code)
+        self.assertFalse(data["success"])
+        self.assertEqual("bad request", data["message"])
+
+    def test_update_patient(self):
+        updated_medication = [{"name": "Crosin", "units": "125 ml"},
+                              {"name": "Paracetamol", "units": "1 tablet"}]
+        res = self.client().patch("/patients/1", json=updated_medication)
+        data = json.loads(res.data)
+
+        self.assertEqual(200, res.status_code)
+        self.assertTrue(data["success"])
+        self.assertEqual(updated_medication, json.loads(data["patient"]["medication"]))
+
+        faulty_updated_medication = [{"name": "Crosin"},
+                                     {"units": "1 tablet"}]
+        res = self.client().patch("/patients/1", json=faulty_updated_medication)
+        data = json.loads(res.data)
+
+        self.assertEqual(400, res.status_code)
+        self.assertFalse(data["success"])
+        self.assertEqual("bad request", data["message"])
+
+    def test_delete_patient(self):
+        res = self.client().delete("/patients/1")
+        data = json.loads(res.data)
+
+        self.assertEqual(200, res.status_code)
+        self.assertTrue(data["success"])
+        self.assertEqual(1, data["patient_id"])
+
+        res = self.client().delete("/patients/100")
+        data = json.loads(res.data)
+
+        self.assertEqual(404, res.status_code)
+        self.assertFalse(data["success"])
+        self.assertEqual("resource not found", data["message"])
 
 
 if __name__ == '__main__':
