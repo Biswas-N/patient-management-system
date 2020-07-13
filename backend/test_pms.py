@@ -22,6 +22,13 @@ def insert_dummy_data() -> None:
                        {"name": "Gwen Stacy", "age": 20, "gender": "Female"},
                        {"name": "Barry Allen", "age": 23, "gender": "Male"},
                        {"name": "Arthur Curry", "age": 52, "gender": "Male"},
+                       {"name": "Selina Kyle", "age": 30, "gender": "Female"},
+                       {"name": "Ben 10", "age": 10, "gender": "Male"},
+                       {"name": "Gwen Stacy", "age": 20, "gender": "Female"},
+                       {"name": "Barry Allen", "age": 23, "gender": "Male"},
+                       {"name": "Arthur Curry", "age": 52, "gender": "Male"},
+                       {"name": "Selina Kyle", "age": 30, "gender": "Female"},
+                       {"name": "Arthur Curry", "age": 52, "gender": "Male"},
                        {"name": "Selina Kyle", "age": 30, "gender": "Female"}]
 
     for patient in sample_patients:
@@ -71,15 +78,16 @@ class ModelsTestCase(unittest.TestCase):
 
     def test_doctor_delete(self):
         doctor = Doctor.query.filter(Doctor.name == "Dr. Biswas").first()
+        doctor_id_copy = doctor.id
         doctor.delete()
 
-        doctor = Doctor.query.filter(Doctor.name == "Dr. Biswas").first()
+        doctor = Doctor.query.get(doctor_id_copy)
 
         self.assertIsNone(doctor)
 
     def test_patient_get_all(self):
         all_patients = Patient.query.all()
-        self.assertEqual(5, len(all_patients))
+        self.assertEqual(12, len(all_patients))
 
     def test_patient_get_single(self):
         # For existing entity
@@ -95,7 +103,7 @@ class ModelsTestCase(unittest.TestCase):
         sample_patient = Patient(**sample_patient_data)
         sample_patient.insert()
 
-        self.assertEqual(6, sample_patient.id)
+        self.assertEqual(13, sample_patient.id)
 
     def test_patient_update(self):
         patient = Patient.query.filter(Patient.name == "Ben 10").first()
@@ -108,9 +116,10 @@ class ModelsTestCase(unittest.TestCase):
 
     def test_patient_delete(self):
         patient = Patient.query.filter(Patient.name == "Ben 10").first()
+        patient_id_copy = patient.id
         patient.delete()
 
-        patient = Patient.query.filter(Patient.name == "Ben 10").first()
+        patient = Patient.query.get(patient_id_copy)
 
         self.assertIsNone(patient)
 
