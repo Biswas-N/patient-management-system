@@ -99,7 +99,7 @@ class PatientEndpointsTestCase(unittest.TestCase):
 
         insert_dummy_data()
 
-    def test_get_all_patients(self):
+    def test_patient_get_all(self):
         res = self.client().get("/patients")
         data = json.loads(res.data)
 
@@ -119,7 +119,7 @@ class PatientEndpointsTestCase(unittest.TestCase):
         self.assertFalse(data["success"])
         self.assertEqual("resource not found", data["message"])
 
-    def test_get_single_patient(self):
+    def test_patient_get_single(self):
         res = self.client().get("/patients/1")
         data = json.loads(res.data)
 
@@ -134,7 +134,7 @@ class PatientEndpointsTestCase(unittest.TestCase):
         self.assertFalse(data["success"])
         self.assertEqual("resource not found", data["message"])
 
-    def test_create_patient(self):
+    def test_patient_create(self):
         new_patient = {"name": "Jack Sparrow", "age": 42, "gender": "Male"}
         res = self.client().post("/patients", json=new_patient)
         data = json.loads(res.data)
@@ -152,7 +152,7 @@ class PatientEndpointsTestCase(unittest.TestCase):
         self.assertFalse(data["success"])
         self.assertEqual("bad request", data["message"])
 
-    def test_update_patient(self):
+    def test_patient_update(self):
         updated_medication = [{"name": "Crosin", "units": "125 ml"},
                               {"name": "Paracetamol", "units": "1 tablet"}]
         res = self.client().patch("/patients/1", json=updated_medication)
@@ -171,7 +171,7 @@ class PatientEndpointsTestCase(unittest.TestCase):
         self.assertFalse(data["success"])
         self.assertEqual("bad request", data["message"])
 
-    def test_delete_patient(self):
+    def test_patient_delete(self):
         res = self.client().delete("/patients/1")
         data = json.loads(res.data)
 

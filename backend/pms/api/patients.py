@@ -14,7 +14,7 @@ def attach_patients_api(app: Flask):
     :param app: A Flask instance with database attached
     """
     @app.route("/patients")
-    def get_all_patients():
+    def patient_get_all():
         page_number = request.args.get("page", 1, type=int)
         start = ITEMS_PER_PAGE * (page_number - 1)
         end = start + ITEMS_PER_PAGE
@@ -38,7 +38,7 @@ def attach_patients_api(app: Flask):
             abort(404)
 
     @app.route("/patients/<int:patient_id>")
-    def get_single_patient(patient_id):
+    def patient_get_single(patient_id):
         patient = Patient.query.get_or_404(patient_id)
 
         return jsonify({
@@ -47,7 +47,7 @@ def attach_patients_api(app: Flask):
         })
 
     @app.route("/patients", methods=["POST"])
-    def create_patient():
+    def patient_create():
         data = request.get_json()
 
         try:
@@ -62,7 +62,7 @@ def attach_patients_api(app: Flask):
             abort(400)
 
     @app.route("/patients/<int:patient_id>", methods=["PATCH"])
-    def update_patient(patient_id):
+    def patient_update(patient_id):
         data = request.get_json()
 
         patient = Patient.query.get_or_404(patient_id)
@@ -79,7 +79,7 @@ def attach_patients_api(app: Flask):
             abort(400)
 
     @app.route("/patients/<int:patient_id>", methods=["DELETE"])
-    def delete_patient(patient_id):
+    def patient_delete(patient_id):
         patient = Patient.query.get_or_404(patient_id)
         patient_id_copy = patient.id
         patient.delete()
