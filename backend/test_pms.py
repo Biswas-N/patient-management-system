@@ -7,6 +7,10 @@ from backend.pms.utils import insert_dummy_data
 
 
 class ModelsTestCase(unittest.TestCase):
+    """
+    ModelsTestCase
+        Test cases to check if SQLAlchemy ORM is behaving as expected
+    """
     def setUp(self):
         self.app = APP
         attach_db(app=self.app, database_path=get_database_path(testing=True))
@@ -92,6 +96,10 @@ class ModelsTestCase(unittest.TestCase):
 
 
 class PatientEndpointsTestCase(unittest.TestCase):
+    """
+    PatientEndpointsTestCase
+        Test cases to verify Patient CRUD api endpoints behaviour
+    """
     def setUp(self):
         self.app = APP
         attach_db(app=self.app, database_path=get_database_path(testing=True))

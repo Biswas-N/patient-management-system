@@ -1,15 +1,14 @@
-import random
-
-from dotenv import load_dotenv
 import os
+import random
+from dotenv import load_dotenv
 
-from backend.pms.models import db, Doctor, Patient
+from .models import db, Doctor, Patient
 
 
 def get_database_path(testing: bool) -> str:
     """
-    get_database_path method creates a SQLAlchemy specific database path based
-    on key-value pairs present in .env file
+    get_database_path(testing: bool)
+        Creates a SQLAlchemy specific database path based on key-value pairs present in .env file
     """
     load_dotenv()
 
@@ -27,6 +26,11 @@ def get_database_path(testing: bool) -> str:
 
 
 def insert_dummy_data() -> None:
+    """
+    insert_dummy_data()
+        (Only used for testing) Populates the database with 4 Doctors and 12 Patients. Patients are assigned to
+        any one of the doctors randomly
+    """
     db.drop_all()
     db.create_all()
 
