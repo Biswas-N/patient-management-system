@@ -195,5 +195,97 @@ class PatientEndpointsTestCase(unittest.TestCase):
         self.assertEqual("resource not found", data["message"])
 
 
+class DoctorEndpointsTestCase(unittest.TestCase):
+    """
+    DoctorEndpointsTestCase
+        Test cases to verify Doctor CRUD api endpoints behaviour
+    """
+    def setUp(self):
+        self.app = APP
+        attach_db(app=self.app, database_path=get_database_path(testing=True))
+        self.client = self.app.test_client
+
+        insert_dummy_data()
+
+    def test_doctor_get_all(self):
+        res = self.client().get("/doctors")
+        data = json.loads(res.data)
+
+        self.assertEqual(200, res.status_code)
+        self.assertTrue(isinstance(data["doctors"], list))
+
+        res = self.client().get("/doctors?page=3")
+        data = json.loads(res.data)
+
+        self.assertEqual(404, res.status_code)
+        self.assertFalse(data["success"])
+        self.assertEqual("resource not found", data["message"])
+
+    def test_doctor_get_single(self):
+        res = self.client().get("/doctors/1")
+        data = json.loads(res.data)
+
+        self.assertEqual(200, res.status_code)
+        self.assertTrue(isinstance(data["doctor"], dict))
+        self.assertEqual("Dr. Biswas", data["doctor"]["name"])
+
+        res = self.client().get("/doctors/100")
+        data = json.loads(res.data)
+
+        self.assertEqual(404, res.status_code)
+        self.assertFalse(data["success"])
+        self.assertEqual("resource not found", data["message"])
+
+    def test_doctor_create(self):
+        new_doctor = {"name": "Dr. Sparrow", "age": 42}
+        res = self.client().post("/doctors", json=new_doctor)
+        data = json.loads(res.data)
+
+        self.assertEqual(201, res.status_code)
+        self.assertTrue(data["success"])
+        self.assertTrue(data["doctor"]["id"])
+        self.assertEqual("Dr. Sparrow", data["doctor"]["name"])
+
+        faulty_new_patient = {"name": "Dr. Sparrow"}
+        res = self.client().post("/doctors", json=faulty_new_patient)
+        data = json.loads(res.data)
+
+        self.assertEqual(400, res.status_code)
+        self.assertFalse(data["success"])
+        self.assertEqual("bad request", data["message"])
+
+    def test_doctor_update(self):
+        updated_doctor = {"name": "Dr. Sparrow", "age": 42}
+        res = self.client().patch("/doctors/1", json=updated_doctor)
+        data = json.loads(res.data)
+
+        self.assertEqual(200, res.status_code)
+        self.assertTrue(data["success"])
+        self.assertEqual(updated_doctor["name"], data["doctor"]["name"])
+        self.assertEqual(updated_doctor["age"], data["doctor"]["age"])
+
+        res = self.client().patch("/doctors/100", json=updated_doctor)
+        data = json.loads(res.data)
+
+        self.assertEqual(404, res.status_code)
+        self.assertFalse(data["success"])
+        self.assertEqual("resource not found", data["message"])
+
+    def test_doctor_delete(self):
+        res = self.client().delete("/doctors/1")
+        data = json.loads(res.data)
+
+        self.assertEqual(200, res.status_code)
+        self.assertTrue(data["success"])
+        self.assertEqual(1, data["doctor_id"])
+
+        res = self.client().delete("/doctors/100")
+        data = json.loads(res.data)
+
+        self.assertEqual(404, res.status_code)
+        self.assertFalse(data["success"])
+        self.assertEqual("resource not found", data["message"])
+
+
 if __name__ == '__main__':
     unittest.main()
