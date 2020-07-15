@@ -148,19 +148,3 @@ def attach_patients_api(app: Flask):
             "success": True,
             "patient_id": patient_id_copy
         })
-
-    @app.errorhandler(400)
-    def bad_request(error):
-        return jsonify({
-            "success": False,
-            "error": 400,
-            "message": "bad request"
-        }), 400
-
-    @app.errorhandler(404)
-    def page_not_found(error):
-        return jsonify({
-            "success": False,
-            "error": 404,
-            "message": "resource not found"
-        }), 404
