@@ -1,7 +1,7 @@
 import json
 from flask import Flask, request, abort, jsonify
 
-from backend.pms.models import Patient
+from ..models import Patient
 
 ITEMS_PER_PAGE = 10
 
