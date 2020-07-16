@@ -1,5 +1,0 @@
-venv
-/.env
-/app.py
-/pms/test_database.db
-/pms/database.db
