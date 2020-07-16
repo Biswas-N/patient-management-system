@@ -1,6 +1,6 @@
 from flask import Flask, request, abort, jsonify
 
-from ..models import Doctor
+from pms.models import Doctor
 
 ITEMS_PER_PAGE = 10
 

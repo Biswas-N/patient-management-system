@@ -1,9 +1,9 @@
 import unittest
 import json
 
-from backend.pms import APP, attach_db, get_database_path
-from backend.pms.models import Doctor, Patient
-from backend.pms.utils import insert_dummy_data
+from pms import APP, attach_db, get_database_path
+from pms.models import Doctor, Patient
+from pms.utils import insert_dummy_data
 
 
 class ModelsTestCase(unittest.TestCase):

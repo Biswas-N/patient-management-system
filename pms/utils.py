@@ -2,7 +2,7 @@ import os
 import random
 from dotenv import load_dotenv
 
-from .models import db, Doctor, Patient
+from pms.models import db, Doctor, Patient
 
 
 def get_database_path(testing: bool) -> str:

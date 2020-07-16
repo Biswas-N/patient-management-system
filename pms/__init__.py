@@ -1,8 +1,8 @@
 from flask import Flask
 
-from .models import attach_db
-from .utils import get_database_path
-from .api import attach_api
+from pms.models import attach_db
+from pms.utils import get_database_path
+from pms.api import attach_api
 
 APP = Flask(__name__)
 
