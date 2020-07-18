@@ -4,6 +4,7 @@ from flask import Flask, request, abort, jsonify
 from pms.models import Patient
 
 ITEMS_PER_PAGE = 10
+BASE_URL = "api"
 
 
 def attach_patients_api(app: Flask):
@@ -14,7 +15,7 @@ def attach_patients_api(app: Flask):
     app: A Flask instance with database attached
     """
 
-    @app.route("/patients")
+    @app.route(f"/{BASE_URL}/patients")
     def patient_get_all():
         """
         GET /patients handler
@@ -57,7 +58,7 @@ def attach_patients_api(app: Flask):
         else:
             abort(404)
 
-    @app.route("/patients/<int:patient_id>")
+    @app.route(f"/{BASE_URL}/patients/<int:patient_id>")
     def patient_get_single(patient_id):
         """
         GET /patients/<int:patient_id> handler
@@ -75,7 +76,7 @@ def attach_patients_api(app: Flask):
             "patient": patient.to_json()
         })
 
-    @app.route("/patients", methods=["POST"])
+    @app.route(f"/{BASE_URL}/patients", methods=["POST"])
     def patient_create():
         """
         POST /patients handler
@@ -101,7 +102,7 @@ def attach_patients_api(app: Flask):
         except TypeError:
             abort(400)
 
-    @app.route("/patients/<int:patient_id>", methods=["PATCH"])
+    @app.route(f"/{BASE_URL}/patients/<int:patient_id>", methods=["PATCH"])
     def patient_update(patient_id):
         """
         PATCH /patients/<int:patient_id> handler
@@ -129,7 +130,7 @@ def attach_patients_api(app: Flask):
         else:
             abort(400)
 
-    @app.route("/patients/<int:patient_id>", methods=["DELETE"])
+    @app.route(f"/{BASE_URL}/patients/<int:patient_id>", methods=["DELETE"])
     def patient_delete(patient_id):
         """
         DELETE /patients/<int:patient_id> handler
