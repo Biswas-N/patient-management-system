@@ -108,19 +108,19 @@ class PatientEndpointsTestCase(unittest.TestCase):
         insert_dummy_data()
 
     def test_patient_get_all(self):
-        res = self.client().get("/patients")
+        res = self.client().get("/api/patients")
         data = json.loads(res.data)
 
         self.assertEqual(200, res.status_code)
         self.assertTrue(isinstance(data["patients"], list))
 
-        res = self.client().get("/patients?page=2")
+        res = self.client().get("/api/patients?page=2")
         data = json.loads(res.data)
 
         self.assertEqual(200, res.status_code)
         self.assertTrue(isinstance(data["patients"], list))
 
-        res = self.client().get("/patients?page=3")
+        res = self.client().get("/api/patients?page=3")
         data = json.loads(res.data)
 
         self.assertEqual(404, res.status_code)
@@ -128,14 +128,14 @@ class PatientEndpointsTestCase(unittest.TestCase):
         self.assertEqual("resource not found", data["message"])
 
     def test_patient_get_single(self):
-        res = self.client().get("/patients/1")
+        res = self.client().get("/api/patients/1")
         data = json.loads(res.data)
 
         self.assertEqual(200, res.status_code)
         self.assertTrue(isinstance(data["patient"], dict))
         self.assertEqual("Ben 10", data["patient"]["name"])
 
-        res = self.client().get("/patients/100")
+        res = self.client().get("/api/patients/100")
         data = json.loads(res.data)
 
         self.assertEqual(404, res.status_code)
@@ -144,7 +144,7 @@ class PatientEndpointsTestCase(unittest.TestCase):
 
     def test_patient_create(self):
         new_patient = {"name": "Jack Sparrow", "age": 42, "gender": "Male"}
-        res = self.client().post("/patients", json=new_patient)
+        res = self.client().post("/api/patients", json=new_patient)
         data = json.loads(res.data)
 
         self.assertEqual(201, res.status_code)
@@ -153,7 +153,7 @@ class PatientEndpointsTestCase(unittest.TestCase):
         self.assertEqual("Jack Sparrow", data["patient"]["name"])
 
         faulty_new_patient = {"name": "Jack Sparrow"}
-        res = self.client().post("/patients", json=faulty_new_patient)
+        res = self.client().post("/api/patients", json=faulty_new_patient)
         data = json.loads(res.data)
 
         self.assertEqual(400, res.status_code)
@@ -163,7 +163,7 @@ class PatientEndpointsTestCase(unittest.TestCase):
     def test_patient_update(self):
         updated_medication = [{"name": "Crosin", "units": "125 ml"},
                               {"name": "Paracetamol", "units": "1 tablet"}]
-        res = self.client().patch("/patients/1", json=updated_medication)
+        res = self.client().patch("/api/patients/1", json=updated_medication)
         data = json.loads(res.data)
 
         self.assertEqual(200, res.status_code)
@@ -172,7 +172,7 @@ class PatientEndpointsTestCase(unittest.TestCase):
 
         faulty_updated_medication = [{"name": "Crosin"},
                                      {"units": "1 tablet"}]
-        res = self.client().patch("/patients/1", json=faulty_updated_medication)
+        res = self.client().patch("/api/patients/1", json=faulty_updated_medication)
         data = json.loads(res.data)
 
         self.assertEqual(400, res.status_code)
@@ -180,14 +180,14 @@ class PatientEndpointsTestCase(unittest.TestCase):
         self.assertEqual("bad request", data["message"])
 
     def test_patient_delete(self):
-        res = self.client().delete("/patients/1")
+        res = self.client().delete("/api/patients/1")
         data = json.loads(res.data)
 
         self.assertEqual(200, res.status_code)
         self.assertTrue(data["success"])
         self.assertEqual(1, data["patient_id"])
 
-        res = self.client().delete("/patients/100")
+        res = self.client().delete("/api/patients/100")
         data = json.loads(res.data)
 
         self.assertEqual(404, res.status_code)
@@ -208,13 +208,13 @@ class DoctorEndpointsTestCase(unittest.TestCase):
         insert_dummy_data()
 
     def test_doctor_get_all(self):
-        res = self.client().get("/doctors")
+        res = self.client().get("/api/doctors")
         data = json.loads(res.data)
 
         self.assertEqual(200, res.status_code)
         self.assertTrue(isinstance(data["doctors"], list))
 
-        res = self.client().get("/doctors?page=3")
+        res = self.client().get("/api/doctors?page=3")
         data = json.loads(res.data)
 
         self.assertEqual(404, res.status_code)
@@ -222,14 +222,14 @@ class DoctorEndpointsTestCase(unittest.TestCase):
         self.assertEqual("resource not found", data["message"])
 
     def test_doctor_get_single(self):
-        res = self.client().get("/doctors/1")
+        res = self.client().get("/api/doctors/1")
         data = json.loads(res.data)
 
         self.assertEqual(200, res.status_code)
         self.assertTrue(isinstance(data["doctor"], dict))
         self.assertEqual("Dr. Biswas", data["doctor"]["name"])
 
-        res = self.client().get("/doctors/100")
+        res = self.client().get("/api/doctors/100")
         data = json.loads(res.data)
 
         self.assertEqual(404, res.status_code)
@@ -238,7 +238,7 @@ class DoctorEndpointsTestCase(unittest.TestCase):
 
     def test_doctor_create(self):
         new_doctor = {"name": "Dr. Sparrow", "age": 42}
-        res = self.client().post("/doctors", json=new_doctor)
+        res = self.client().post("/api/doctors", json=new_doctor)
         data = json.loads(res.data)
 
         self.assertEqual(201, res.status_code)
@@ -247,7 +247,7 @@ class DoctorEndpointsTestCase(unittest.TestCase):
         self.assertEqual("Dr. Sparrow", data["doctor"]["name"])
 
         faulty_new_patient = {"name": "Dr. Sparrow"}
-        res = self.client().post("/doctors", json=faulty_new_patient)
+        res = self.client().post("/api/doctors", json=faulty_new_patient)
         data = json.loads(res.data)
 
         self.assertEqual(400, res.status_code)
@@ -256,7 +256,7 @@ class DoctorEndpointsTestCase(unittest.TestCase):
 
     def test_doctor_update(self):
         updated_doctor = {"name": "Dr. Sparrow", "age": 42}
-        res = self.client().patch("/doctors/1", json=updated_doctor)
+        res = self.client().patch("/api/doctors/1", json=updated_doctor)
         data = json.loads(res.data)
 
         self.assertEqual(200, res.status_code)
@@ -264,7 +264,7 @@ class DoctorEndpointsTestCase(unittest.TestCase):
         self.assertEqual(updated_doctor["name"], data["doctor"]["name"])
         self.assertEqual(updated_doctor["age"], data["doctor"]["age"])
 
-        res = self.client().patch("/doctors/100", json=updated_doctor)
+        res = self.client().patch("/api/doctors/100", json=updated_doctor)
         data = json.loads(res.data)
 
         self.assertEqual(404, res.status_code)
@@ -272,14 +272,14 @@ class DoctorEndpointsTestCase(unittest.TestCase):
         self.assertEqual("resource not found", data["message"])
 
     def test_doctor_delete(self):
-        res = self.client().delete("/doctors/1")
+        res = self.client().delete("/api/doctors/1")
         data = json.loads(res.data)
 
         self.assertEqual(200, res.status_code)
         self.assertTrue(data["success"])
         self.assertEqual(1, data["doctor_id"])
 
-        res = self.client().delete("/doctors/100")
+        res = self.client().delete("/api/doctors/100")
         data = json.loads(res.data)
 
         self.assertEqual(404, res.status_code)
