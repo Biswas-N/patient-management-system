@@ -1,7 +1,8 @@
 from flask import Flask, jsonify
 
-from .patients import attach_patients_api
-from .doctors import attach_doctors_api
+from pms.api.patients import attach_patients_api
+from pms.api.doctors import attach_doctors_api
+from pms.auth import AuthError
 
 
 def attach_api(app: Flask):
@@ -32,3 +33,12 @@ def attach_errorhandlers(app: Flask):
             "error": 404,
             "message": "resource not found"
         }), 404
+
+    @app.errorhandler(AuthError)
+    def auth_error(error):
+        return jsonify({
+            "success": False,
+            "code": error.error['code'],
+            "error": error.status_code,
+            "message": error.error['description']
+        }), error.status_code
