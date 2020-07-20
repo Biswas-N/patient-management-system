@@ -2,6 +2,7 @@ import json
 from flask import Flask, request, abort, jsonify
 
 from pms.models import Patient
+from pms.auth import requires_auth
 
 ITEMS_PER_PAGE = 10
 BASE_URL = "api"
@@ -16,15 +17,20 @@ def attach_patients_api(app: Flask):
     """
 
     @app.route(f"/{BASE_URL}/patients")
+    @requires_auth("read:patient")
     def patient_get_all():
         """
         GET /patients handler
             Returns a JSON object holding total_patients (count), patients
             (as a list) and success (boolean)
 
-            STATUS CODES: 200, 404
-            EXCEPTIONS: ResourceNotFound (404 - when tried to access pages
-                        exceeding the limit)
+            STATUS CODES: 200, 401, 403, 404
+            EXCEPTIONS: - ResourceNotFound (404 - when tried to access pages
+                            exceeding the limit)
+                        - AuthenticationError (401 - when bearer token not
+                            found or found but incorrect)
+                        - AuthorizationError (403 - when user does not have
+                            the required permissions to access the endpoint)
         """
         page_number = request.args.get("page", 1, type=int)
         start = ITEMS_PER_PAGE * (page_number - 1)
@@ -59,15 +65,20 @@ def attach_patients_api(app: Flask):
             abort(404)
 
     @app.route(f"/{BASE_URL}/patients/<int:patient_id>")
+    @requires_auth("read:patient")
     def patient_get_single(patient_id):
         """
         GET /patients/<int:patient_id> handler
             Returns a JSON object holding the patient (JSON object) and
             success(boolean)
 
-            STATUS CODES: 200, 404
-            EXCEPTIONS: ResourceNotFound (404 - when tried to access
-                        unknown or non existing patient)
+            STATUS CODES: 200, 401, 403, 404
+            EXCEPTIONS: - ResourceNotFound (404 - when tried to access
+                            unknown or non existing patient)
+                        - AuthenticationError (401 - when bearer token not
+                            found or found but incorrect)
+                        - AuthorizationError (403 - when user does not have
+                            the required permissions to access the endpoint)
         """
         patient = Patient.query.get_or_404(patient_id)
 
@@ -77,15 +88,20 @@ def attach_patients_api(app: Flask):
         })
 
     @app.route(f"/{BASE_URL}/patients", methods=["POST"])
+    @requires_auth("create:patient")
     def patient_create():
         """
         POST /patients handler
             Creates a new patient record and returns a JSON object holding
             the new patient data (JSON object) and success (boolean)
 
-            STATUS CODES: 200, 400
-            EXCEPTIONS: TypeError (400 - when request body has wrong data
-                        or data structure)
+            STATUS CODES: 200, 400, 401, 403
+            EXCEPTIONS: - TypeError (400 - when request body has wrong data
+                            or data structure)
+                        - AuthenticationError (401 - when bearer token not
+                            found or found but incorrect)
+                        - AuthorizationError (403 - when user does not have
+                            the required permissions to access the endpoint)
         """
         data = request.get_json()
 
@@ -103,17 +119,22 @@ def attach_patients_api(app: Flask):
             abort(400)
 
     @app.route(f"/{BASE_URL}/patients/<int:patient_id>", methods=["PATCH"])
+    @requires_auth("update:patient")
     def patient_update(patient_id):
         """
         PATCH /patients/<int:patient_id> handler
             Updates the medication in an existing patient record and returns
             a JSON object with updated patient data and success (boolean)
 
-            STATUS CODES: 200, 400, 404
-            EXCEPTIONS: TypeError (400 - when request body has wrong data
-                        or data structure)
-                        ResourceNotFound (404 - when tried to update unknown
-                        or non existing patient)
+            STATUS CODES: 200, 400, 401, 403, 404
+            EXCEPTIONS: - TypeError (400 - when request body has wrong data
+                            or data structure)
+                        - AuthenticationError (401 - when bearer token not
+                            found or found but incorrect)
+                        - AuthorizationError (403 - when user does not have
+                            the required permissions to access the endpoint)
+                        - ResourceNotFound (404 - when tried to update unknown
+                            or non existing patient)
         """
         data = request.get_json()
 
@@ -131,15 +152,20 @@ def attach_patients_api(app: Flask):
             abort(400)
 
     @app.route(f"/{BASE_URL}/patients/<int:patient_id>", methods=["DELETE"])
+    @requires_auth("delete:patient")
     def patient_delete(patient_id):
         """
         DELETE /patients/<int:patient_id> handler
             Deletes an existing patient record and returns a JSON object with
             deleted patient id and success (boolean)
 
-            STATUS CODES: 200, 404
-            EXCEPTIONS: ResourceNotFound (404 - when tried to delete unknown
-                        or non existing patient)
+            STATUS CODES: 200, 401, 403, 404
+            EXCEPTIONS: - ResourceNotFound (404 - when tried to delete unknown
+                            or non existing patient)
+                        - AuthenticationError (401 - when bearer token not
+                            found or found but incorrect)
+                        - AuthorizationError (403 - when user does not have
+                            the required permissions to access the endpoint)
         """
         patient = Patient.query.get_or_404(patient_id)
         patient_id_copy = patient.id
