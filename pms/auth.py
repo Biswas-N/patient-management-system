@@ -69,7 +69,7 @@ def check_permissions(permission, payload):
     @Output:
         True - If permission exists in payload['permissions']
         Raises 400 - If permissions does not exists in payload
-        Raises 401 - If permissions list exists in payload, but given
+        Raises 403 - If permissions list exists in payload, but given
                      permission not in payload['permissions']
     """
     if "permissions" not in payload:
@@ -81,7 +81,7 @@ def check_permissions(permission, payload):
         raise AuthError({
             "code": "unauthorized",
             "description": "Permissions not found"
-        }, 401)
+        }, 403)
     else:
         return True
 
