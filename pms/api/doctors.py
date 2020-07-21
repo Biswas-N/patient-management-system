@@ -17,7 +17,7 @@ def attach_doctors_api(app: Flask):
 
     @app.route(f"/{BASE_URL}/doctors")
     @requires_auth("read:doctor")
-    def doctors_get_all():
+    def doctors_get_all(payload):
         """
         GET /doctors handler
             Returns a JSON object holding total_doctors (count), doctors
@@ -65,7 +65,7 @@ def attach_doctors_api(app: Flask):
 
     @app.route(f"/{BASE_URL}/doctors/<int:doctor_id>")
     @requires_auth("read:doctor")
-    def doctor_get_single(doctor_id):
+    def doctor_get_single(payload, doctor_id):
         """
         GET /doctors/<int:doctor_id> handler
             Returns a JSON object holding the doctor (JSON object) and
@@ -88,7 +88,7 @@ def attach_doctors_api(app: Flask):
 
     @app.route(f"/{BASE_URL}/doctors", methods=["POST"])
     @requires_auth("create:doctor")
-    def doctor_create():
+    def doctor_create(payload):
         """
         POST /doctors handler
             Creates a new doctor record and returns a JSON object holding
@@ -119,7 +119,7 @@ def attach_doctors_api(app: Flask):
 
     @app.route(f"/{BASE_URL}/doctors/<int:doctor_id>", methods=["PATCH"])
     @requires_auth("update:doctor")
-    def doctor_update(doctor_id):
+    def doctor_update(payload, doctor_id):
         """
         PATCH /doctors/<int:doctor_id>"
             Updates the name or/and age of a doctor, if the key exists in the
@@ -151,7 +151,7 @@ def attach_doctors_api(app: Flask):
 
     @app.route(f"/{BASE_URL}/doctors/<int:doctor_id>", methods=["DELETE"])
     @requires_auth("delete:doctor")
-    def doctor_delete(doctor_id):
+    def doctor_delete(payload, doctor_id):
         """
         DELETE /doctors/<int:doctor_id> handler
             Deletes an existing doctor record and returns a JSON object with
