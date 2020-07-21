@@ -18,7 +18,7 @@ def attach_patients_api(app: Flask):
 
     @app.route(f"/{BASE_URL}/patients")
     @requires_auth("read:patient")
-    def patient_get_all():
+    def patient_get_all(payload):
         """
         GET /patients handler
             Returns a JSON object holding total_patients (count), patients
@@ -66,7 +66,7 @@ def attach_patients_api(app: Flask):
 
     @app.route(f"/{BASE_URL}/patients/<int:patient_id>")
     @requires_auth("read:patient")
-    def patient_get_single(patient_id):
+    def patient_get_single(payload, patient_id):
         """
         GET /patients/<int:patient_id> handler
             Returns a JSON object holding the patient (JSON object) and
@@ -89,7 +89,7 @@ def attach_patients_api(app: Flask):
 
     @app.route(f"/{BASE_URL}/patients", methods=["POST"])
     @requires_auth("create:patient")
-    def patient_create():
+    def patient_create(payload):
         """
         POST /patients handler
             Creates a new patient record and returns a JSON object holding
@@ -120,7 +120,7 @@ def attach_patients_api(app: Flask):
 
     @app.route(f"/{BASE_URL}/patients/<int:patient_id>", methods=["PATCH"])
     @requires_auth("update:patient")
-    def patient_update(patient_id):
+    def patient_update(payload, patient_id):
         """
         PATCH /patients/<int:patient_id> handler
             Updates the medication in an existing patient record and returns
@@ -153,7 +153,7 @@ def attach_patients_api(app: Flask):
 
     @app.route(f"/{BASE_URL}/patients/<int:patient_id>", methods=["DELETE"])
     @requires_auth("delete:patient")
-    def patient_delete(patient_id):
+    def patient_delete(payload, patient_id):
         """
         DELETE /patients/<int:patient_id> handler
             Deletes an existing patient record and returns a JSON object with
