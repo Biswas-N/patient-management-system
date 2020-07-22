@@ -1,11 +1,13 @@
 import React from "react";
-
 import { Link } from "react-router-dom";
 import { Layout, Menu } from "antd";
+
+import { login_url } from "../auth";
 
 const { Header } = Layout;
 
 const HeaderComponent = () => {
+
   return (
     <Header>
       <div className="logo" />
@@ -24,7 +26,9 @@ const HeaderComponent = () => {
         <Menu.Item key="3">
           <Link to="/doctors">Doctors</Link>
         </Menu.Item>
-        <Menu.Item key="4">Login / Signup</Menu.Item>
+        <Menu.Item key="4">
+          <a href={login_url}>Login / Signup</a>
+        </Menu.Item>
       </Menu>
     </Header>
   );

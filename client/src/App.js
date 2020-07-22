@@ -3,6 +3,7 @@ import "./App.css";
 
 import NavBar from "./components/Header";
 import Home from "./containers/HomePage/HomePage";
+import Callback from "./components/Callback";
 import Patients from "./containers/PatientsPage/PatientsPage";
 import Doctors from "./containers/DoctorsPage/DoctorsPage";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -18,6 +19,7 @@ function App() {
         <Content style={{ padding: "0 50px" }}>
           <Switch>
             <Route path="/" exact component={Home} />
+            <Route path="/callback" component={Callback} />
             <Route path="/patients" component={Patients} />
             <Route path="/doctors" component={Doctors} />
           </Switch>
