@@ -1,34 +1,24 @@
 import React from "react";
-import "./App.css";
+import { Switch, Route } from "react-router-dom";
 
-import NavBar from "./components/Header";
-import Home from "./containers/HomePage/HomePage";
+import "./App.css";
+import MyLayout from "./containers/Layout/Layout";
+import Home from "./components/HomePage/HomePage";
 import Callback from "./components/Callback";
 import Patients from "./containers/PatientsPage/PatientsPage";
 import Doctors from "./containers/DoctorsPage/DoctorsPage";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Layout } from "antd";
 
-const { Content, Footer } = Layout;
 
 function App() {
   return (
-    <Router>
-      <Layout className="layout">
-        <NavBar />
-        <Content style={{ padding: "0 50px" }}>
-          <Switch>
-            <Route path="/" exact component={Home} />
-            <Route path="/callback" component={Callback} />
-            <Route path="/patients" component={Patients} />
-            <Route path="/doctors" component={Doctors} />
-          </Switch>
-        </Content>
-        <Footer style={{ textAlign: "center" }}>
-          Created by Biswas Nandamuri
-        </Footer>
-      </Layout>
-    </Router>
+    <MyLayout>
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/callback" component={Callback} />
+        <Route path="/patients" component={Patients} />
+        <Route path="/doctors" component={Doctors} />
+      </Switch>
+    </MyLayout>
   );
 }
 
