@@ -36,7 +36,7 @@ def attach_doctors_api(app: Flask):
         end = start + ITEMS_PER_PAGE
 
         doctors = Doctor.query.all()
-        formatted_doctors = [doctor.to_json() for doctor in doctors]
+        formatted_doctors = [doctor.short() for doctor in doctors]
 
         # Response case 1:
         #   If no doctors record in the database,
@@ -83,7 +83,7 @@ def attach_doctors_api(app: Flask):
 
         return jsonify({
             "success": True,
-            "doctor": doctor.to_json()
+            "doctor": doctor.long()
         })
 
     @app.route(f"/{BASE_URL}/doctors", methods=["POST"])
@@ -112,7 +112,7 @@ def attach_doctors_api(app: Flask):
 
             return jsonify({
                 "success": True,
-                "doctor": new_doctor.to_json()
+                "doctor": new_doctor.long()
             }), 201
         except TypeError:
             abort(400)
@@ -146,7 +146,7 @@ def attach_doctors_api(app: Flask):
 
         return {
             "success": True,
-            "doctor": doctor.to_json()
+            "doctor": doctor.long()
         }
 
     @app.route(f"/{BASE_URL}/doctors/<int:doctor_id>", methods=["DELETE"])

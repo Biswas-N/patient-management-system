@@ -37,7 +37,7 @@ def attach_patients_api(app: Flask):
         end = start + ITEMS_PER_PAGE
 
         patients = Patient.query.all()
-        formatted_patients = [patient.to_json() for patient in patients]
+        formatted_patients = [patient.short() for patient in patients]
 
         # Response case 1:
         #   If no patients record in the database,
@@ -84,7 +84,7 @@ def attach_patients_api(app: Flask):
 
         return jsonify({
             "success": True,
-            "patient": patient.to_json()
+            "patient": patient.long()
         })
 
     @app.route(f"/{BASE_URL}/patients", methods=["POST"])
@@ -113,7 +113,7 @@ def attach_patients_api(app: Flask):
 
             return jsonify({
                 "success": True,
-                "patient": new_patient.to_json()
+                "patient": new_patient.long()
             }), 201
         except TypeError:
             abort(400)
@@ -146,7 +146,7 @@ def attach_patients_api(app: Flask):
 
             return {
                 "success": True,
-                "patient": patient.to_json()
+                "patient": patient.long()
             }
         else:
             abort(400)

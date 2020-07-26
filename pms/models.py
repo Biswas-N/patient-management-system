@@ -43,10 +43,28 @@ class Doctor(db.Model):
         self.name = name
         self.age = age
 
-    def to_json(self):
+    def short(self):
         """
-        to_json(self)
-            Method to create a json representation of the Doctor instance
+        short(self)
+            Method to return short representation of the doctor object
+
+            EXAMPLE:
+                {
+                    "id": 21,
+                    "name": "Dr. Biswas",
+                    "patients_count": 3
+                }
+        """
+        return {
+            "id": self.id,
+            "name": self.name,
+            "patients_count": len(self.patients)
+        }
+
+    def long(self):
+        """
+        long(self)
+            Method to return long representation of a doctor object
 
             EXAMPLE:
                 {
@@ -58,15 +76,12 @@ class Doctor(db.Model):
                             "id": 2,
                             "name": "Peter Parker",
                             "age": 21,
-                            "gender": "Male",
-                            "medication": [{"name": "Crosin", "units": "125 ml"},
-                                            {"name": "Paracetemal", "units": "2 tablets"}],
-                            "doctor_id": 21
+                            "doctor_name": "Dr. Biswas"
                         }
                     ]
                 }
         """
-        formatted_patients = [patient.to_json() for patient in self.patients]
+        formatted_patients = [patient.short() for patient in self.patients]
         return {
             "id": self.id,
             "name": self.name,
@@ -141,10 +156,30 @@ class Patient(db.Model):
         self.age = age
         self.gender = gender
 
-    def to_json(self):
+    def short(self):
         """
-        to_json(self)
-            Method to create a json representation of the Patient instance
+        short(self)
+            Method to return short representation of the Patient object
+
+            EXAMPLE:
+                {
+                    "id": 2,
+                    "name": "Peter Parker",
+                    "age": 21,
+                    "doctor_name": "Dr. Biswas"
+                }
+        """
+        formatted_doctor = self.doctor.name if self.doctor else None
+        return {
+            "id": self.id,
+            "name": self.name,
+            "doctor_name": formatted_doctor
+        }
+
+    def long(self):
+        """
+        long(self)
+            Method to return long representation of the Patient instance
 
             EXAMPLE:
                 {
@@ -154,16 +189,21 @@ class Patient(db.Model):
                     "gender": "Male",
                     "medication": [{"name": "Crosin", "units": "125 ml"},
                                     {"name": "Paracetemal", "units": "2 tablets"}],
-                    "doctor_id": 21
+                    "doctor": {
+                        "id": 21,
+                        "name": "Dr. Biswas",
+                        "patients_count": 3
+                    }
                 }
         """
+        formatted_doctor = self.doctor.short() if self.doctor else None
         return {
             "id": self.id,
             "name": self.name,
             "age": self.age,
             "gender": self.gender,
             "medication": self.medication,
-            "doctor_id": self.doctor_id
+            "doctor": formatted_doctor
         }
 
     def insert(self):
