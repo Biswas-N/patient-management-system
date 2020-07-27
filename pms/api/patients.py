@@ -39,6 +39,8 @@ def attach_patients_api(app: Flask):
         patients = Patient.query.all()
         formatted_patients = [patient.short() for patient in patients]
 
+        last_page = True if (end > len(formatted_patients)) else False
+
         # Response case 1:
         #   If no patients record in the database,
         #   then reply with an empty list and count of zero
@@ -46,7 +48,8 @@ def attach_patients_api(app: Flask):
             return jsonify({
                 "success": True,
                 "total_patients": 0,
-                "patients": formatted_patients
+                "patients": formatted_patients,
+                "last_page": last_page
             })
         # Response case 2:
         #   If patients record in the database,
@@ -56,7 +59,8 @@ def attach_patients_api(app: Flask):
             return jsonify({
                 "success": True,
                 "total_patients": len(formatted_patients),
-                "patients": formatted_patients[start:end]
+                "patients": formatted_patients[start:end],
+                "last_page": last_page
             })
         # Response case 3:
         #   If invalid case (like trying to access page outside limit),

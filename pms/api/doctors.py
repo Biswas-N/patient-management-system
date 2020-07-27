@@ -21,7 +21,7 @@ def attach_doctors_api(app: Flask):
         """
         GET /doctors handler
             Returns a JSON object holding total_doctors (count), doctors
-            (as a list) and success (boolean)
+            (as a list), success (boolean) and last_page (boolean)
 
             STATUS CODES: 200, 401, 403, 404
             EXCEPTIONS: - ResourceNotFound (404 - when tried to access pages
@@ -38,6 +38,8 @@ def attach_doctors_api(app: Flask):
         doctors = Doctor.query.all()
         formatted_doctors = [doctor.short() for doctor in doctors]
 
+        last_page = True if (end > len(formatted_doctors)) else False
+
         # Response case 1:
         #   If no doctors record in the database,
         #   then reply with an empty list and count of zero
@@ -45,7 +47,8 @@ def attach_doctors_api(app: Flask):
             return jsonify({
                 "success": True,
                 "total_doctors": 0,
-                "doctors": formatted_doctors
+                "doctors": formatted_doctors,
+                "last_page": last_page
             })
         # Response case 2:
         #   If doctors record in the database,
@@ -55,7 +58,8 @@ def attach_doctors_api(app: Flask):
             return jsonify({
                 "success": True,
                 "total_doctors": len(formatted_doctors),
-                "doctors": formatted_doctors[start:end]
+                "doctors": formatted_doctors[start:end],
+                "last_page": last_page
             })
         # Response case 3:
         #   If invalid case (like trying to access page outside limit),
