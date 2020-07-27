@@ -22,7 +22,7 @@ def attach_patients_api(app: Flask):
         """
         GET /patients handler
             Returns a JSON object holding total_patients (count), patients
-            (as a list) and success (boolean)
+            (as a list), success (boolean) and last_page (boolean)
 
             STATUS CODES: 200, 401, 403, 404
             EXCEPTIONS: - ResourceNotFound (404 - when tried to access pages
