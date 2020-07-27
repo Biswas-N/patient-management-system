@@ -1,35 +1,81 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Tooltip, Avatar } from "antd";
 
-import { login_url } from "../auth";
+import { loginUrl, getCurrentUser } from "../shared/auth";
 
 const { Header } = Layout;
 
 const HeaderComponent = () => {
+  const [state, setState] = useState({
+    currentUser: null
+  });
 
-  return (
-    <Header>
-      <div className="logo" />
+  useEffect(() => {
+    if (localStorage.getItem("bearer_token") != null) {
+      getCurrentUser().then(res => {
+        setState({
+          currentUser: res.data
+        })
+      })
+    }
+  }, [])
+
+  const logout = () => {
+    setState({
+      currentUser: null
+    })
+    localStorage.removeItem("bearer_token")
+  }
+
+  let menu = (
+    <Menu
+      theme="dark"
+      mode="horizontal"
+      style={{ float: "right" }}
+    >
+      <Menu.Item key="1">
+        <a href={loginUrl}>Login / Signup</a>
+      </Menu.Item>
+    </Menu>
+  )
+  if (state.currentUser != null) {
+
+    menu = (
       <Menu
         theme="dark"
         mode="horizontal"
-        defaultSelectedKeys={["1"]}
         style={{ float: "right" }}
       >
         <Menu.Item key="1">
-          <Link to="/">Home</Link>
-        </Menu.Item>
-        <Menu.Item key="2">
           <Link to="/patients">Patients</Link>
         </Menu.Item>
-        <Menu.Item key="3">
+        <Menu.Item key="2">
           <Link to="/doctors">Doctors</Link>
         </Menu.Item>
-        <Menu.Item key="4">
-          <a href={login_url}>Login / Signup</a>
+        <Menu.Item key="3" onClick={logout}>
+          <Tooltip
+            placement="bottom"
+            color={'#f50'}
+            title={"Click to logout!"}
+          >
+            <Avatar style={{ marginRight: "6px" }} src={state.currentUser.picture} />
+            {`Hello, ${state.currentUser.name}`}
+          </Tooltip>
         </Menu.Item>
       </Menu>
+    )
+  }
+
+  return (
+    <Header>
+      <div style={{
+        maxWidth: "800px",
+        margin: "0 auto"
+      }}>
+        <Link to="/"><div className="logo" /></Link>
+        {menu}
+      </div>
     </Header>
   );
 };
