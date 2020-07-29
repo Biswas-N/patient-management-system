@@ -7,3 +7,4 @@ app.py
 test_database.db
 database.db
 .pytest_cache
+.vscode

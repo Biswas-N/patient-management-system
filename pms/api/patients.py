@@ -144,7 +144,11 @@ def attach_patients_api(app: Flask):
 
         patient = Patient.query.get_or_404(patient_id)
 
-        if set([("name" in medication and "units" in medication) for medication in data]) == {True}:
+        if set(
+            [(
+                "name" in medication and "units" in medication
+            ) for medication in data]
+        ) == {True}:
             patient.medication = json.dumps(data)
             patient.update()
 

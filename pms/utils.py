@@ -8,7 +8,8 @@ from pms.models import db, Doctor, Patient
 def get_database_path(testing: bool) -> str:
     """
     get_database_path(testing: bool)
-        Creates a SQLAlchemy specific database path based on key-value pairs present in .env file
+        Creates a SQLAlchemy specific database path based on key-value pairs
+        present in .env file
     """
     load_dotenv()
 
@@ -18,18 +19,20 @@ def get_database_path(testing: bool) -> str:
         else:
             database_filename = os.getenv("sqlite_filename")
         project_dir = os.path.dirname(os.path.abspath(__file__))
-        database_path = "sqlite:///{}".format(os.path.join(project_dir, database_filename))
+        database_path = "sqlite:///{}".format(
+            os.path.join(project_dir, database_filename)
+        )
+
         return database_path
     else:
         return os.getenv("DATABASE_URL")
-        
 
 
 def insert_dummy_data() -> None:
     """
     insert_dummy_data()
-        (Only used for testing) Populates the database with 4 Doctors and 12 Patients. Patients are assigned to
-        any one of the doctors randomly
+        (Only used for testing) Populates the database with 4 Doctors and
+        12 Patients. Patients are assigned to any one of the doctors randomly
     """
     db.drop_all()
     db.create_all()
@@ -57,8 +60,14 @@ def insert_dummy_data() -> None:
                        {"name": "Selina Kyle", "age": 30, "gender": "Female"}]
 
     for patient in sample_patients:
-        temp_patient = Patient(name=patient["name"], age=patient["age"], gender=patient["gender"])
+        temp_patient = Patient(
+            name=patient["name"],
+            age=patient["age"],
+            gender=patient["gender"]
+        )
         random_doctor = random.choice(sample_doctors)
-        temp_patient.doctor = Doctor.query.filter(Doctor.name == random_doctor["name"]).first()
+        temp_patient.doctor = Doctor.query.filter(
+            Doctor.name == random_doctor["name"]
+        ).first()
 
         temp_patient.insert()

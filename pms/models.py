@@ -107,7 +107,10 @@ class Doctor(db.Model):
             deletes a doctor from the database
 
             EXAMPLE
-                doctor = Doctor.query.filter(Doctor.name == "Dr. Biswas").first()
+                doctor = Doctor
+                            .query
+                            .filter(Doctor.name == "Dr. Biswas")
+                            .first()
                 doctor.delete()
         """
         db.session.delete(self)
@@ -119,7 +122,10 @@ class Doctor(db.Model):
             updates an existing doctor information in the database
 
             EXAMPLE
-                doctor = Doctor.query.filter(Doctor.name == "Dr. Biswas").first()
+                doctor = Doctor
+                            .query
+                            .filter(Doctor.name == "Dr. Biswas")
+                            .first()
                 doctor.age = doctor.age + 1
                 doctor.update()
         """
@@ -146,7 +152,8 @@ class Patient(db.Model):
     gender = Column(String, nullable=False)  # Eg: Male / Female
     # Medication is a lazy json blob
     # Sample data type - [{"name" : string, "units" : string}]
-    medication = Column(String, default="")  # Eg: [{"name": "Crosin", "units": "125 ml"}]
+    # Eg: [{"name": "Crosin", "units": "125 ml"}]
+    medication = Column(String, default="")
     # Automatically filled when a doctor is assigned to a patient
     # Eg: sample_patient.doctor = sample_doctor
     doctor_id = Column(Integer, ForeignKey('doctors.id'))
@@ -188,7 +195,7 @@ class Patient(db.Model):
                     "age": 21,
                     "gender": "Male",
                     "medication": [{"name": "Crosin", "units": "125 ml"},
-                                    {"name": "Paracetemal", "units": "2 tablets"}],
+                                  {"name": "Paracetemal", "units": "2 tablets"}],
                     "doctor": {
                         "id": 21,
                         "name": "Dr. Biswas",
@@ -225,7 +232,10 @@ class Patient(db.Model):
             deletes a patient from the database
 
             EXAMPLE
-                patient = Patient.query.filter(Patient.name == "Ben 10").first()
+                patient = Patient
+                            .query
+                            .filter(Patient.name == "Ben 10")
+                            .first()
                 patient.delete()
         """
         db.session.delete(self)
@@ -237,7 +247,10 @@ class Patient(db.Model):
             updates an existing patient information in the database
 
             EXAMPLE
-                patient = Patient.query.filter(Patient.name == "Ben 10").first()
+                patient = Patient
+                            .query
+                            .filter(Patient.name == "Ben 10")
+                            .first()
                 patient.age = patient.age + 1
                 patient.update()
         """
