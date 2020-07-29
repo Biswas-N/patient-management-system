@@ -21,8 +21,8 @@ def get_database_path(testing: bool) -> str:
         database_path = "sqlite:///{}".format(os.path.join(project_dir, database_filename))
         return database_path
     else:
-        # TODO: Logic for PostgreSQL connection
-        pass
+        return os.getenv("DATABASE_URL")
+        
 
 
 def insert_dummy_data() -> None:
