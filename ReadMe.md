@@ -1,45 +1,45 @@
-# Patient Management System
-An open source Python's Flask and JavaScript's ReactJS based full stack application to manage patient records in a hospital.
+# Patient Management System (PMS)
+PMS is a full stack web application to manage patients and doctors record in a medical facility.
 
-## Technical Specifications
+Built using [Flask](https://github.com/pallets/flask) (backend), [React](https://github.com/facebook/react) (frontend) and PostgreSQL. Information regarding detailed technical specifications can be found [here](./docs/TechSpecs.md).
 
-### Tech Stack
+## Installation
+1. Clone this repository and move into the folder.
+    ```sh
+    $ git clone https://github.com/Biswas-N/patient-management-system.git
+    $ cd patient-management-system
+    ```
+2. Create a virtual environment using [virtualenv](https://github.com/pypa/virtualenv) (Optional but advised).
+    ```sh
+    $ virtualenv venv
+    ```
+3. Activate the newly created virtual environment.
+    ```sh
+    # For Windows
+    > venv\Scripts\activate
+    ```
+    or
+    ```sh
+    # For Unix based (MacOS and Ubuntu)
+    $ source venv/bin/activate
+    ```
+4. Install the dependencies.
+    ```sh
+    $ pip install -r requirements.txt
+    ```
+5. Later, create a file called `.env` in the project root and copy-past the contents of `.env.EXAMPLE` into the `.env` file.
 
-**Tools Used:**
+*Note: `.env.EXAMPLE` had bearer token variable which are needed during testing phase*
 
-   - Python (Backend) / JavaScript (Frontend)
-   - SQLite (Development) / PostgreSQL (Production)
-
-### Models
-
-- Patient
-    - id : Serial Integer
-    - name : String
-    - age : Integer
-    - gender : Character
-    - medication : String
-    - doctor : Doctor
-
-- Doctor
-    - id : Serial Integer
-    - name : String
-    - age : Integer
-    - patients : List of patients
-
-*Note: A doctor can have **many** patients but a patient can only have **one** doctor*
-
-### Roles
-
-- Nurse - administers medication to the patient
-    - read:patient
-- Doctor - create and check the patient, assign and update patient medication
-    - all of above
-    - create:patient
-    - update:patient
-    - delete:patient
-    - read:doctor
-- Dean (Admin) - CRUD a doctor and a patient
-    - all of above
-    - create:doctor
-    - update:doctor
-    - delete:doctor
+6. Finally, run these commands to start the application locally (uses SQLite, so no need for PostgreSQL config)
+    ```sh
+    # For Windows
+    > set FLASK_APP=pms
+    > flask run
+    ```
+    or
+    ```sh
+    # For Unix based (MacOS and Ubuntu)
+    $ export FLASK_APP=pms
+    $ flask run
+    ```
