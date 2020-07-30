@@ -5,7 +5,7 @@ Tools used for testing:
 
 > *Note: Included bearer token are only valid for 24 hours. Thus bearer tokens needs to be refreshed after 24 hours.*
 
-> *Token expires at **>Include date time<***
+> *Token expires at **July 31, 18:23 (AEST)***
 
 ## Testing Production Deployment (in Heroku)
 
