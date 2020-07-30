@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { List, Pagination, Button, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { Link } from "react-router-dom";
 
-import Patient from "../components/Patient/PatientListItem";
-import getBackendAxios from "../shared/axios";
+import Patient from "../../components/Patient/PatientListItem";
+import getBackendAxios from "../../shared/axios";
 
 
 const PatientsPage = (props) => {
@@ -32,15 +31,14 @@ const PatientsPage = (props) => {
             <List
                 header={
                     <h2>
-                        All Patients <Link to="/patients/create">
-                            <Button
+                        All Patients <Button
+                                onClick={() => (message.info("Sorry! Not yet implemented"))}
                                 style={{ float: "right" }}
                                 type="primary"
                                 shape="round"
                                 icon={<PlusOutlined />}>
                                 Create New
                             </Button>
-                        </Link>
                     </h2>
                 }
                 footer={

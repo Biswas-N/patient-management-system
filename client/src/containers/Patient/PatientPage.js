@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from "react";
 import { message } from "antd";
 
-import PatientItem from "../components/Patient/PatientItem";
-import getBackendAxios from "../shared/axios";
+import PatientItem from "../../components/Patient/PatientItem";
+import getBackendAxios from "../../shared/axios";
 
 const Patient = (props) => {
     const [patient, setPatient] = useState(null)
@@ -40,7 +40,7 @@ const Patient = (props) => {
                 <PatientItem
                     data={patient}
                     onDelete={onDeleteHandler}
-                    onEdit={() => console.log("Clicked Edit")}
+                    onEdit={() => (message.info("Sorry! Not yet implemented"))}
                 /> :
                 <p>Loading...</p>
             }

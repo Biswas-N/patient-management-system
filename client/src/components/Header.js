@@ -6,7 +6,7 @@ import { loginUrl, getCurrentUser } from "../shared/auth";
 
 const { Header } = Layout;
 
-const HeaderComponent = () => {
+const HeaderComponent = (props) => {
   const [state, setState] = useState({
     currentUser: null
   });
@@ -24,8 +24,8 @@ const HeaderComponent = () => {
   const logout = () => {
     setState({
       currentUser: null
-    })
-    localStorage.removeItem("bearer_token")
+    });
+    localStorage.removeItem("bearer_token");
   }
 
   let menu = (

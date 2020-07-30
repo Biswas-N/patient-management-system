@@ -16,7 +16,7 @@ const MyLayout = (props) => {
                     {props.children}
                 </Content>
                 <Footer style={{ textAlign: "center" }}>
-                    Created by Biswas Nandamuri
+                    Developed by Biswas Nandamuri
             </Footer>
             </Layout>
         </Router>

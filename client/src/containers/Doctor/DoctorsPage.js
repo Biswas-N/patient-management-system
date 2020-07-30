@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { List, Pagination, Button, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-import Doctor from "../components/Doctor/DoctorListItem";
-import getBackendAxios from "../shared/axios";
+import Doctor from "../../components/Doctor/DoctorListItem";
+import getBackendAxios from "../../shared/axios";
 
 const DoctorsPage = (props) => {
     const [currentPage, setCurrentPage] = useState(1)
@@ -31,11 +31,11 @@ const DoctorsPage = (props) => {
                 header={
                     <h2>
                         All Doctors <Button
-                            style={{float: "right"}}
-                            type="primary"
-                            shape="round"
-                            href="/doctors/create"
-                            icon={<PlusOutlined />}>
+                                onClick={() => (message.info("Sorry! Not yet implemented"))}
+                                style={{ float: "right" }}
+                                type="primary"
+                                shape="round"
+                                icon={<PlusOutlined />}>
                                 Create New
                             </Button>
                     </h2>
