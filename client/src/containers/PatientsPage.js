@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { List, Pagination, Button } from 'antd';
+import { List, Pagination, Button, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { Link } from "react-router-dom";
 
 import Patient from "../components/Patient/PatientListItem";
-import backend from "../shared/axios";
+import getBackendAxios from "../shared/axios";
 
 
-const PatientsPage = () => {
+const PatientsPage = (props) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [state, setState] = useState({
         "data": null
     });
     useEffect(() => {
+        var backend = getBackendAxios()
         backend.get(`/patients?page=${currentPage}`)
             .then(res => {
                 setState({
                     "data": res.data
                 })
             })
-            .catch(err => { console.error(err) });
+            .catch(err => {
+                props.history.push("/");
+                message.error("Please login first");
+            });
     }, [currentPage])
 
     let list = (<p>Loading...</p>)
@@ -27,14 +32,15 @@ const PatientsPage = () => {
             <List
                 header={
                     <h2>
-                        All Patients <Button
-                            style={{float: "right"}}
-                            type="primary"
-                            shape="round"
-                            href="/patients/create"
-                            icon={<PlusOutlined />}>
+                        All Patients <Link to="/patients/create">
+                            <Button
+                                style={{ float: "right" }}
+                                type="primary"
+                                shape="round"
+                                icon={<PlusOutlined />}>
                                 Create New
                             </Button>
+                        </Link>
                     </h2>
                 }
                 footer={

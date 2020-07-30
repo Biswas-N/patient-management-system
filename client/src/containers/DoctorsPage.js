@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { List, Pagination, Button } from 'antd';
+import { List, Pagination, Button, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import Doctor from "../components/Doctor/DoctorListItem";
-import backend from "../shared/axios";
+import getBackendAxios from "../shared/axios";
 
-const DoctorsPage = () => {
+const DoctorsPage = (props) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [state, setState] = useState({
         "data": null
     });
     useEffect(() => {
+        var backend = getBackendAxios()
         backend.get(`/doctors?page=${currentPage}`)
             .then(res => {
                 setState({
                     "data": res.data
                 })
             })
-            .catch(err => { console.error(err) });
+            .catch(err => {
+                props.history.push("/");
+                message.error("Please login first");
+            });
     }, [currentPage])
 
     let list = (<p>Loading...</p>)
