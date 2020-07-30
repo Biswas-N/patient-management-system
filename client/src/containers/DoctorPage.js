@@ -18,7 +18,7 @@ const Doctor = (props) => {
                 props.history.push("/");
                 message.error("Please login first");
             });
-    }, [props.match.params.id])
+    }, [props.match.params.id, props.history])
 
     const onDeleteHandler = () => {
         message.loading('Deleting...');

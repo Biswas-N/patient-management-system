@@ -22,7 +22,7 @@ const DoctorsPage = (props) => {
                 props.history.push("/");
                 message.error("Please login first");
             });
-    }, [currentPage])
+    }, [currentPage, props.history])
 
     let list = (<p>Loading...</p>)
     if (state.data != null) {
