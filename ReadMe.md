@@ -1,6 +1,8 @@
 # Patient Management System (PMS)
 PMS is a full stack web application to manage patients and doctors record in a medical facility.
 
+> Deployed using Heroku at [link](http://patient-management-system-1603.herokuapp.com/).
+
 Built using [Flask](https://github.com/pallets/flask) (backend), [React](https://github.com/facebook/react) (frontend) and PostgreSQL. Information regarding detailed technical specifications can be found [here](./docs/TechSpecs.md).
 
 > The project's python code follows PEP8 Styling Guide
