@@ -3,9 +3,7 @@ Tools used for testing:
 - [Postman](https://www.postman.com/downloads/) or [Newman](https://www.npmjs.com/package/newman) (Newman is a CLI replacement for Postman)
 - [pytest](https://pypi.org/project/pytest/)
 
-> *Note: Included bearer token are only valid for 24 hours. Thus bearer tokens needs to be refreshed after 24 hours.*
-
-> *Token expires at **July 31, 18:23 (AEST)***
+> *Given tokens are expired, please [email me](mailto:biswas.bin2@gmail.com) to get a new set of token*
 
 ## Testing Production Deployment (in Heroku)
 
