@@ -7,6 +7,8 @@ Built using [Flask](https://github.com/pallets/flask) (backend), [React](https:/
 
 > The project's python code follows PEP8 Styling Guide
 
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/Biswas-N/patient-management-system)
+
 ## Local Deployment
 1. Clone this repository and move into the folder.
     ```sh
